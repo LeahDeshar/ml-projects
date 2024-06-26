@@ -8,11 +8,20 @@
   <body>
     <input type="file" id="imageInput" accept="image/*" />
     <button onclick="uploadImage()">Classify</button>
+
+    <br /><br />
+    <img
+      id="selectedImage"
+      src="#"
+      alt="Selected Image"
+      style="max-width: 300px; max-height: 300px; display: none"
+    />
+    <br />
     <p id="predictResult"></p>
 
     <script type="text/javascript">
       async function uploadImage() {
-        const input = document.getElemntById("imageInput");
+        const input = document.getElementById("imageInput");
         const image = input.files[0];
 
         if (!image) {
@@ -23,12 +32,21 @@
         const formData = new FormData();
         formData.append("file", file);
 
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const imgElement = document.getElementById("selectedImage");
+          imgElement.src = e.target.result;
+          imgElement.style.display = "block";
+        };
+        reader.readAsDataURL(file);
+
         try {
-          const response = await fetch("http://217.0.0.1/predict-image/", {
+          const response = await fetch("http://127.0.0.1:8000/predict-image/", {
             method: "POST",
             body: formData,
           });
           const result = await response.json();
+          console.log(result);
           document.getElementById(
             "predictResult"
           ).innerText = `Prediction: ${result.prediction}`;
