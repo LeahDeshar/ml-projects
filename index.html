@@ -22,6 +22,21 @@
         const file = input.files[0];
         const formData = new FormData();
         formData.append("file", file);
+
+        try {
+          const response = await fetch("http://217.0.0.1/predict-image/", {
+            method: "POST",
+            body: formData,
+          });
+          const result = await response.json();
+          document.getElementById(
+            "predictResult"
+          ).innerText = `Prediction: ${result.prediction}`;
+        } catch (error) {
+          console.error(error);
+          document.getElementById("predictResult").innerText =
+            "There was an error classifying the image";
+        }
       }
     </script>
   </body>
