@@ -1,2 +1,4 @@
-
+adult.csv
+data.csv
+__pycache__
 mnist_model.pkl
